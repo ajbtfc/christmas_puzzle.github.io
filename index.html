@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STL CITY SC Puzzle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    h1 {
+      color: #ff2d55;
+      margin-top: 0;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border-radius: 6px;
+      border: none;
+      background: #ff2d55;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+    button.enabled {
+      opacity: 1;
+    }
+    .hint {
+      margin-top: 1rem;
+      color: #cccccc;
+      font-size: 0.9rem;
+    }
+    .hidden {
+      display: none;
+    }
+    .success {
+      color: #00ff9c;
+      margin-top: 1.5rem;
+    }
+    .error {
+      color: #ff6b6b;
+      margin-top: 1rem;
+    }
+    .note {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #888888;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>What Do These Dates Have in Common?</h1>
+
+    <p><strong>Clue 1:</strong></p>
+    <ul>
+      <!-- Placeholder home Saturdays for 2026 -->
+      <li>February 21</li>
+      <li>March 7</li>
+      <li>March 21</li>
+      <li>April 25</li>
+      <li>May 13</li>
+      <li>May 23</li>
+      <li>July 16</li>
+      <li>July 25</li>
+      <li>August 1</li>
+      <li>August 22</li>
+      <li>August 30</li>
+      <li>September 12</li>
+      <li>September 19</li>
+      <li>October 11</li>
+      <li>October 14</li>
+      <li>October 28</li>
+      <li>October 31</li>
+    </ul>
+
+    <p>What are these dates?</p>
+
+    <div id="answerBlock">
+      <input type="text" id="answer" placeholder="Your answer" oninput="validateInput()" />
+      <button id="submitBtn" onclick="checkAnswer()" disabled>Submit</button>
+    </div>
+
+    <div id="error" class="error hidden">Not quite — think bigger.</div>
+
+    <div id="hint2" onshown="moveAnswerBelow('hint2')" class="hint hidden">
+      <strong>Clue 2:</strong><br />
+      Who is Yoann Damet? No Googling!
+    </div>
+
+    <div id="error2" class="error hidden">Close, but not quite on target.</div>
+    
+    <div id="hint3" onshown="moveAnswerBelow('hint3')" class="hint hidden">
+      <strong>Clue 3:</strong><br />
+      <ul>
+      <!-- Placeholder home Saturdays for 2026 -->
+      <li>Charlotte</li>
+      <li>Seattle</li>
+      <li>New England</li>
+      <li>San Jose</li>
+      <li>Los Angeles (The good one)</li>
+      <li>Austin</li>
+      <li>Kansas City</li>
+      <li>Colorado</li>
+      <li>Salt Lake City</li>
+      <li>Houston</li>
+      <li>Dallas</li>
+      <li>Minnesota</li>
+      <li>Toronto</li>
+      <li>Los Angeles (Not the good one)</li>
+      <li>Vancouver</li>
+      <li>Portland</li>
+      <li>San Diego</li>
+    </ul>
+    <p>What are these locations?</p>
+    </div>
+    <div id="error3" class="error hidden">Still no, but you've got to be close</div>
+    <div id="success" class="success hidden">
+      ⚽🎉 You cracked it! 🎉⚽
+      <br /><br />
+      These are <strong>STL CITY SC home matches</strong>.
+      <br /><br />
+      You get to pick a home game and receive <strong>two tickets</strong> to see
+      <strong>STL CITY SC</strong> play!
+      <br /><br />
+      Send a screenshot of this page to claim your prize.
+    </div>
+
+    <div class="note">
+      
+    </div>
+  </div>
+
+  <script>
+    let attempts = 0;
+
+    function validateInput() {
+      const input = document.getElementById('answer');
+      const btn = document.getElementById('submitBtn');
+
+      if (input.value.trim().length >= 4) {
+        btn.disabled = false;
+        btn.classList.add('enabled');
+      } else {
+        btn.disabled = true;
+        btn.classList.remove('enabled');
+      }
+    }
+
+    function moveAnswerBelow(elementId) {
+    const clue = document.getElementById(elementId);
+    const answerBlock = document.getElementById('answerBlock');
+
+    if (clue && answerBlock) {
+      clue.after(answerBlock);
+     }
+   }
+
+    function checkAnswer() {
+      const answer = document.getElementById('answer').value.toLowerCase().trim();
+      const correctAnswers = [
+        'home games',
+        'home matches',
+        'stl city home games',
+        'stl city sc home games'
+      ];
+      const cityKeywords = [
+      'stl',
+      'st louis',
+      'st. louis',
+      'city',
+      'city sc',
+      'stl city',
+      'saint louis',
+      'sc',
+      'tickets'
+      ];
+      const gameKeywords = [
+        'home',
+        'game',
+        'games',
+        'match',
+        'matches',
+        'soccer',
+        'football',
+        'soccer capital',
+        'mls',
+        'energizer',
+        'park'
+      ];
+      const mentionsCity = cityKeywords.some(word => answer.includes(word));
+      const mentionsGame = gameKeywords.some(word => answer.includes(word));
+
+      const isCorrect = mentionsCity || mentionsGame;
+
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('success').classList.add('hidden');
+
+      if (isCorrect) {
+        document.getElementById('success').classList.remove('hidden');
+        return;
+      }
+
+      // Wrong answer
+      attempts++;
+      document.getElementById('error').classList.remove('hidden');
+
+      if (attempts === 1) {
+        const h2 = document.getElementById('hint2');
+        h2.classList.remove('hidden');
+        moveAnswerBelow('hint2');
+      }
+
+  if (attempts === 2) {
+    const h3 = document.getElementById('hint3');
+    document.getElementById('error2').classList.remove('hidden');
+    h3.classList.remove('hidden');
+    moveAnswerBelow('hint3');
+  }
+  if (attempts === 3) {
+    document.getElementById('error3').classList.remove('hidden');
+  }
+}
+
+  </script>
+</body>
+</html>
